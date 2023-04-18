@@ -25,15 +25,15 @@ export const getSalesHandler=async(
 }
 
 
-// export const postSalesHandler=async (
-//     req:Request,
-//     res:Response,
-//     next:NextFunction
-// ) =>{
-// try {
+export const postSalesHandler=async (
+    req:Request,
+    res:Response,
+    next:NextFunction
+) =>{
+try {
+    console.log(req.body)
     
-    
-// } catch (error) {
-//     next(new AppError(error.statusCode,error.message))
-// }
-// }
+} catch (error) {
+    next(new AppError(error.statusCode,error.message))
+}
+}

@@ -11,7 +11,12 @@ export const getBrandHandler = async (
   ) => {
     try {
 
-    let Brand= await BrandRepo.find();
+    let Brand= await BrandRepo.find({
+        order:{
+            id:'ASC'
+        }
+    });
+    console.log(Brand)
       res.status(200).json({
         status: 'success',
        

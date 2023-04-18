@@ -10,7 +10,11 @@ export const getCategory=async (
     next:NextFunction,
 )=>{
     try {
-        let Category=await CategoryRepo.find();
+        let Category=await CategoryRepo.find({
+            order:{
+                id:'ASC'
+            }
+        });
         res.status(200).json({
             status:'success',
             data:Category

@@ -14,6 +14,9 @@ import CustomerRoute from './Routes/Customer.routes';
 import PaymentRoute from './Routes/Payment.routes';
 
 import ProductRoute from './Routes/Product.routes';
+import ServicesRoute from './Routes/Service.routes';
+import BookingRoute from './Routes/Booking.routes';
+
 import CategoryRoute from './Routes/Category.routes';
 AppDataSource.initialize().then(async () => {
 
@@ -55,6 +58,10 @@ app.use('/doc',swaggerUiExpress.serve,swaggerUiExpress.setup(swaggerDocs));
     app.use('/customer',CustomerRoute);
     app.use('/payment',PaymentRoute);
     app.use('/product',ProductRoute);
+    app.use('/service',ServicesRoute);
+    app.use('/booking',BookingRoute);
+
+
 
 
     // unhandled routes
