@@ -9,11 +9,11 @@ export class Sales{
     @PrimaryGeneratedColumn('uuid')
     id:string
 
-    @Column()
-    product_name:string
+    // @Column()
+    // product_name:string
 
-    @Column()
-    unit:string
+    // @Column()
+    // unit:string
 
     @Column()
     quantities:string

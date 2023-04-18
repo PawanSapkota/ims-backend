@@ -1,19 +1,35 @@
 import { Entity,PrimaryGeneratedColumn,Column,CreateDateColumn,UpdateDateColumn, ManyToMany, JoinTable} from 'typeorm';
 import { Product } from './Product';
+import { RoleEnumType } from './User';
 
+export enum StatusEnumType{
+    PENDING='pending',
+    CANCELED='canceled',
+    COMPLETED='completed'
+}
 @Entity()
-export class Services{
+export class Booking{
     @PrimaryGeneratedColumn('uuid')
     id:string
 
     @Column()
-    service_name:string
+    title:string
 
     @Column()
     price:string
 
     @Column()
     image:string
+
+    @Column({
+        type:'enum',
+        enum:StatusEnumType,
+        default:StatusEnumType.PENDING
+    })
+    status:StatusEnumType.PENDING
+
+    @Column()
+    date:string
     
     @Column({
         type:'jsonb',
@@ -21,7 +37,7 @@ export class Services{
         default:() => "'[]'",
         nullable:true,
     })
-    product:Array<{name:string,product_id:string,unit:string,quantity:string}>
+    service:Array<{service_id:string,name:string}>
 
     @CreateDateColumn()
     createdAt:Date
