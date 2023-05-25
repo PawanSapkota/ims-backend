@@ -84,4 +84,5 @@ app.use('/doc',swaggerUiExpress.serve,swaggerUiExpress.setup(swaggerDocs));
 
     // start express server
     app.listen(port,()=>console.log("Express server has started on port: "+port));
+    console.log("port",port)
 }).catch(error => console.log(error))
