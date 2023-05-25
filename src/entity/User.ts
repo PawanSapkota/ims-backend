@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn,UpdateDateColumn, Column,Index, CreateDateColumn, BeforeInsert } from "typeorm"
-import * as bcrypt from 'bcryptjs'
 
 export enum RoleEnumType{
     USER='user',
@@ -12,8 +11,8 @@ export enum RoleEnumType{
 @Entity()
 export class User {
 
-    @PrimaryGeneratedColumn()
-    id: number
+    @PrimaryGeneratedColumn('uuid')
+    id: string
 
     @Index('email_index')
     @Column({
@@ -36,19 +35,5 @@ export class User {
 
     @UpdateDateColumn()
     updatedAt:Date
-
-
-    @BeforeInsert()
-    async hashPassword(){
-        this.password=await bcrypt.hash(this.password,12)
-    }
-
-    static async comparePasswords(
-        candidatePassword: string,
-        hashedPassword: string
-    ){
-        return await  bcrypt.compare(candidatePassword,hashedPassword)
-    }
-
 
 }

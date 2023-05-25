@@ -2,17 +2,21 @@ import { NextFunction, Request, Response } from "express";
 import AppError from "../Utils/AppError";
 import { AppDataSource } from "../data-source";
 import {Category} from '../entity/Category';
-
+export interface RequestCustom extends Request
+{
+    User: any;
+}
 const CategoryRepo= AppDataSource.getRepository(Category)
 export const getCategory=async (
-    req:Request,
+    req:RequestCustom,
     res:Response,
     next:NextFunction,
 )=>{
     try {
+        console.log(req.User)
         let Category=await CategoryRepo.find({
             order:{
-                id:'ASC'
+                createdAt:'ASC'
             }
         });
         res.status(200).json({
