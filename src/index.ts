@@ -16,8 +16,13 @@ import PaymentRoute from './Routes/Payment.routes';
 import ProductRoute from './Routes/Product.routes';
 import ServicesRoute from './Routes/Service.routes';
 import BookingRoute from './Routes/Booking.routes';
+import UsersRoute from './Routes/User.routes';
 
 import CategoryRoute from './Routes/Category.routes';
+import StaffRoute from './Routes/Staff.routes';
+import HTML_TEMPLATE from './View/mail-template';
+import SENDMAIL from './Utils/Mail';
+
 AppDataSource.initialize().then(async () => {
 
     // create express app
@@ -26,6 +31,7 @@ AppDataSource.initialize().then(async () => {
     app.use(cors({credentials:true,origin:'*'}))
     app.use('/public',express.static('src/Public'));
     app.use(morgan('dev'));
+    
      // swagger setup
 const swaggerOptions={
     definition:{
@@ -60,10 +66,11 @@ app.use('/doc',swaggerUiExpress.serve,swaggerUiExpress.setup(swaggerDocs));
     app.use('/product',ProductRoute);
     app.use('/service',ServicesRoute);
     app.use('/booking',BookingRoute);
+    app.use('/auth',UsersRoute);
+    app.use('/staff',StaffRoute);
 
 
-
-
+    
     // unhandled routes
     app.all('*', (req: Request, res: Response, next: NextFunction) => {
         next(new AppError(404, `Route ${req.originalUrl} not found`));
