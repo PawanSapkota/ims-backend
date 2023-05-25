@@ -71,13 +71,13 @@ export const postProductHandler = async (
         req.body.product_category = category;
         req.body.image = req.file.filename;
         console.log(brand,category,req.body.priceandunit);
-let newUnits=[];
+        let newUnits=[];
         req.body.priceandunit.map((val,i)=>{
             let data=JSON.parse(val);
             newUnits.push(data)
         })
 
-        req.body.priceandunit=[...newUnits];
+        req.body.priceandunit=[...newUnits]
 
         await ProductRepo.save(req.body).then((result) => {
             res.status(200).json({
@@ -114,6 +114,13 @@ export const updateProductHandler = async (
             return next(new AppError(404, "Product with this di doesn't exist"))
         }
         req.body.image = req.file ? req.file.filename : Product.image;
+        let newUnits=[];
+        req.body.priceandunit.map((val,i)=>{
+            let data=JSON.parse(val);
+            newUnits.push(data)
+        })
+
+        req.body.priceandunit=[...newUnits]
 
         Object.assign(Product, req.body);
         await ProductRepo.save(req.body).then((result) => {

@@ -62,15 +62,22 @@ let product=[];
 
 export const updateServiceHandler=async(req:Request,res:Response,next:NextFunction)=>{
     try {
-        console.log(req.body,req.file);
+        // console.log(req.body,req.file);
         let Service=await BookingRepo.findOneBy({id:req.params.id});
         if(!Service){
             return next(new AppError(404,"booking with this id not found" ));
         }
         req.body.image = req.file ? req.file.filename : Service.image;
+        let product=[];
+        req.body.service.map((val,i)=>{
+            let data=JSON.parse(val);
+            return product.push(data)
+        })
+        // console.log(product)
 
-
-console.log(req.body)
+        req.body.service=[...product];
+ 
+console.log(req.body,"g")
         Object.assign(Service,req.body);
         await BookingRepo.save(Service).then(result=>{
             console.log(result)

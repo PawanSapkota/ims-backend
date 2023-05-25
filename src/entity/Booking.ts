@@ -1,6 +1,5 @@
 import { Entity,PrimaryGeneratedColumn,Column,CreateDateColumn,UpdateDateColumn, ManyToMany, JoinTable} from 'typeorm';
-import { Product } from './Product';
-import { RoleEnumType } from './User';
+
 
 export enum StatusEnumType{
     PENDING='pending',
