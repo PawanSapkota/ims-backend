@@ -46,7 +46,7 @@ const swaggerOptions={
            servers:[4002]
        }
     },
-    apis:["./routes/*.ts",`${__dirname}/routes/*.routes.ts`,]
+     apis:["./routes/*.ts","./Routes/*.ts","./**/*.ts",'index.ts',`${__dirname}/routes/*.routes.ts`,`${__dirname}/Routes/*.routes.ts`]
    }
 const swaggerDocs=swaggerJsDoc(swaggerOptions);
 app.use('/doc',swaggerUiExpress.serve,swaggerUiExpress.setup(swaggerDocs));
