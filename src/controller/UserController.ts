@@ -1,53 +1,156 @@
 import { AppDataSource } from '../data-source'
 import { NextFunction, Request, Response } from "express"
 import { User } from "../entity/User"
+import AppError from '../Utils/AppError'
+import * as bcrypt from 'bcryptjs'
+import * as jwt from 'jsonwebtoken'
+import HTML_TEMPLATE from '../View/mail-template';
+import SENDMAIL from '../Utils/Mail';
 
-export class UserController {
 
-    private userRepository = AppDataSource.getRepository(User)
+const userRepository = AppDataSource.getRepository(User)
 
-    async all(request: Request, response: Response, next: NextFunction) {
-        return this.userRepository.find()
-    }
+export const RegisterUserHandler = async (
+  req: Request, res: Response, next: NextFunction
+) => {
+  try {
+    console.log(req.body)
+    let oldPassword = '';
+    await bcrypt
+      .hash(req.body.password, 10)
+      .then((hashedPassword) => {
+        console.log(hashedPassword);
+        let oldPassword = req.body.password;
 
-    async one(request: Request, response: Response, next: NextFunction) {
-        const id = parseInt(request.params.id)
-        
-
-        const user = await this.userRepository.findOne({
-            where: { id }
+        userRepository.save({
+          email: req.body.email,
+          password: hashedPassword,
+          role: req.body.role
         })
+          .then((result: any) => {
+            const message = `Hi there, your email ${req.body.email} password is ${oldPassword}`
+            const options = {
+              from: "VERIFICATION <nischalkarki1661@gmail.com>", // sender address
+              to: req.body.email, // receiver email
+              subject: "Send email in Node.JS with Nodemailer using Gmail account to test", // Subject line
+              text: message,
+              html: HTML_TEMPLATE(message),
+            }
 
-        if (!user) {
-            return "unregistered user"
+            SENDMAIL(options, (info) => {
+              console.log("Email sent successfully");
+              return console.log("MESSAGE ID: ", info.messageId);
+            });
+            res.status(201).json({
+              message: "User Created Successfully",
+              result,
+              password: oldPassword
+            });
+          })
+          .catch((e) => {
+            res.status(500).json({
+              message: "Error creating user",
+              e,
+            });
+          });
+      })
+      .catch((e) => {
+        res.status(500).send({
+          message: "Password was not hashed successfully",
+          e,
+        });
+      });
+  } catch (error) {
+    next(new AppError(error.statusCode, error.message))
+
+  }
+}
+
+export const AllUser = async (
+  req: Request, res: Response, next: NextFunction
+) => {
+  try {
+    await userRepository.find().then((result) => {
+      res.status(201).json({
+        message: "User Created Successfully",
+        result,
+      });
+    }).catch(e => {
+      res.status(500).json({
+        message: "Password was not hashed successfully",
+        e,
+      });
+    })
+  } catch (error) {
+    next(new AppError(error.statusCode, error.message))
+  }
+}
+
+export const LoginUserHandler = async (
+  req: Request, res: Response, next: NextFunction
+) => {
+  try {
+    console.log(req.body)
+    let User = await userRepository.findOneBy({ email: req.body.email });
+    console.log(User)
+
+    bcrypt.compare(req.body.password, User.password, function (err, data) {
+      console.log(err, data);
+      if (err) {
+        res.status(400).json({
+          message: "password does not match",
+        });
+      }
+      if (data) {
+        //   create JWT token
+        const token = jwt.sign(
+          {
+            userId: User.id,
+            userEmail: User.email,
+            userRole: User.role
+          },
+          "RANDOM-TOKEN",
+          { expiresIn: "24h" }
+        );
+
+        console.log(jwt.verify(token, "RANDOM-TOKEN"))
+
+        //   return success response
+        res.status(200).json({
+          message: "Login Successful",
+          email: User.email,
+          role: User.role,
+          token,
+        });
+      }
+    })
+  } catch (error) {
+    next(new AppError(error.statusCode, error.message))
+
+  }
+}
+
+export const deleteUserHandler = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        let Category = await userRepository.findOneBy({ email: req.body.email });
+        if (!Category) {
+            return next(new AppError(404, "cateory with this di doesn't exist"))
         }
-        return user
-    }
-
-    async save(request: Request, response: Response, next: NextFunction) {
-        const { firstName, lastName, age } = request.body;
-
-        const user = Object.assign(new User(), {
-            firstName,
-            lastName,
-            age
-        })
-
-        return this.userRepository.save(user)
-    }
-
-    async remove(request: Request, response: Response, next: NextFunction) {
-        const id = parseInt(request.params.id)
-
-        let userToRemove = await this.userRepository.findOneBy({ id })
-
-        if (!userToRemove) {
-            return "this user not exist"
-        }
-
-        await this.userRepository.remove(userToRemove)
-
-        return "user has been removed"
+        console.log(Category)
+        await userRepository.remove(Category).then((result: object) => {
+            res.status(200).json({
+                message: "category has been deleted",
+                result
+            })
+        }).catch((err: any) => {
+            next(new AppError(err.statusCode, err.message))
+        });
+    } catch (error: any) {
+        next(new AppError(error.statusCode, error.message))
     }
 
 }
