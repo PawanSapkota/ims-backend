@@ -3,11 +3,11 @@ import { DataSource } from "typeorm"
 
 export const AppDataSource = new DataSource({
     type: "postgres",
-    host: "dpg-chnrong2qv207f3bv2p0-a.oregon-postgres.render.com",
+    host: "dpg-chrfo8pmbg5e1f27uqt0-a.oregon-postgres.render.com",
     port: 5432,
-    username: "sahil",
-    password: "akiLwQ1FZanL1wcfb8u4HQFhBqwM70hz",
-    database: "ims_21kv",
+    username: "kisan",
+    password: "D8g2trHTyAsRHngSpUDvX8asnzjyTv2V",
+    database: "imscodehub",
     synchronize: true,
     ssl:true,
     logging: false,
