@@ -12,7 +12,7 @@ export const AppDataSource = new DataSource({
     ssl:true,
     logging: false,
     entities: [
-        'src/entity/**/*.ts'
+        'src/entity/**/*.ts',"./src/entity/**/*.ts"
     ], 
     migrations: [
         'src/migration/**/*.ts'
