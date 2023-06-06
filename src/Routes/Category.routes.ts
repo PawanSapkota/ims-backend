@@ -1,6 +1,6 @@
-import {Router} from 'express'
-import {getCategory,postCategoryHandler,deleteCategoryHandler,patchCategoryHandler} from '../controller/Category.controller';
-import {Auth} from '../Utils/ValidateRoutes'
+import { Router } from 'express'
+import { getCategory, postCategoryHandler, deleteCategoryHandler, patchCategoryHandler } from '../controller/Category.controller';
+import { Auth } from '../Utils/ValidateRoutes'
 const router = Router();
 
 /**
@@ -36,8 +36,6 @@ const router = Router();
  *  get:
  *     summary: Use to request all user Record
  *     tags: [Category Record]
- *     security:
- *       - BasicAuth: []
  *     responses:
  *        '200':
  *          description: A sucessfull response
@@ -88,14 +86,14 @@ const router = Router();
  */
 
 router
-.route('/')
-.get(Auth,getCategory)
-.post(Auth,postCategoryHandler);
+    .route('/')
+    .get(getCategory)
+    .post(postCategoryHandler);
 
 
 router.route('/:id')
-.patch(patchCategoryHandler)
-.delete(deleteCategoryHandler);
+    .patch(patchCategoryHandler)
+    .delete(deleteCategoryHandler);
 
 
 
