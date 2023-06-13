@@ -1,10 +1,14 @@
-
-import {Router} from 'express';
-import { getBrandHandler,postBrandHandler,deleteBrand,updateBrandHandler } from '../controller/Brand.controller';
-import {upload} from '../Utils/UploadFile'
+import { Router } from "express";
+import {
+  getBrandHandler,
+  getSingleBrandHandler,
+  postBrandHandler,
+  deleteBrand,
+  updateBrandHandler,
+} from "../controller/Brand.controller";
+import { upload } from "../Utils/UploadFile";
 const router = Router();
 // router.use(deserializeUser, requireUser);
-
 
 /**
  * @swagger
@@ -15,7 +19,7 @@ const router = Router();
  *         required:
  *           - Brand_name
  *           - image
- *         properties: 
+ *         properties:
  *           Brand_name:
  *             type: string
  *             description: this is for name of the category
@@ -29,7 +33,7 @@ const router = Router();
  * tags:
  *   name: Brand Record
  *   description: Record of all user CRUD
- * 
+ *
  */
 
 /**
@@ -47,20 +51,33 @@ const router = Router();
  *     requestBody:
  *       content:
  *         multipart/form-data:
- *           schema: 
+ *           schema:
  *             $ref: '#/components/schemas/BrandDto'
  *     responses:
  *         '200':
  *           description: A sucessfull response
- * 
+ *
  * /brand/{id}:
+ *  get:
+ *     summary: Use to request all user Record
+ *     tags: [Brand Record]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: this is for id
+ *     responses:
+ *        '200':
+ *          description: A sucessfull response
  *  patch:
  *     summary: used to update brands
  *     tags: [Brand Record]
  *     parameters:
  *       - in: path
  *         name: id
- *         schema: 
+ *         schema:
  *           type: string
  *         required: true
  *         description: this if or params with name id
@@ -80,7 +97,7 @@ const router = Router();
  *         name: id
  *         schema:
  *           type: string
- *         required: true 
+ *         required: true
  *         description: this is for id
  *     responses:
  *        '200':
@@ -88,14 +105,15 @@ const router = Router();
  */
 
 router
-  .route('/')
-  .post(upload.single('image'), postBrandHandler)
-  
-  .get(getBrandHandler)
+  .route("/")
+  .post(upload.single("image"), postBrandHandler)
+
+  .get(getBrandHandler);
 //   .delete(getPostHandler);
 
 router
-  .route('/:id')
-  .patch(upload.single('image'),updateBrandHandler)
-  .delete(deleteBrand)
-  export default router;
+  .route("/:id")
+  .get(getSingleBrandHandler)
+  .patch(upload.single("image"), updateBrandHandler)
+  .delete(deleteBrand);
+export default router;
