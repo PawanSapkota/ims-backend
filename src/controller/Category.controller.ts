@@ -79,6 +79,7 @@ export const deleteCategoryHandler=async (
             next:NextFunction
             )=>{
                 try {
+                    console.log(req.params.id)
                     let Category=await CategoryRepo.findOneBy({id:req.params.id});
                     if(!Category){
                         return next(new AppError(404,"cateory with this di doesn't exist"))
